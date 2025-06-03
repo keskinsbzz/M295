@@ -2,6 +2,11 @@ package ch.flughafen.flugapi295.controller;
 
 import ch.flughafen.flugapi295.model.Startflughafen;
 import ch.flughafen.flugapi295.service.StartflughafenService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +32,12 @@ public class StartflughafenController {
     }
 
     @PostMapping
-    public Startflughafen create(@RequestBody Startflughafen startflughafen) {
+    public Startflughafen create(@RequestBody @Valid Startflughafen startflughafen) {
         return service.save(startflughafen);
     }
 
     @PutMapping
-    public Startflughafen update(@RequestBody Startflughafen startflughafen) {
+    public Startflughafen update(@RequestBody @Valid Startflughafen startflughafen) {
         return service.update(startflughafen);
     }
 
@@ -41,4 +46,3 @@ public class StartflughafenController {
         service.deleteById(id);
     }
 }
-

@@ -2,6 +2,7 @@ package ch.flughafen.flugapi295.controller;
 
 import ch.flughafen.flugapi295.model.Flug;
 import ch.flughafen.flugapi295.service.FlugService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +28,12 @@ public class FlugController {
     }
 
     @PostMapping
-    public Flug create(@RequestBody Flug flug) {
+    public Flug create(@RequestBody @Valid Flug flug) {
         return service.save(flug);
     }
 
     @PutMapping
-    public Flug update(@RequestBody Flug flug) {
+    public Flug update(@RequestBody @Valid Flug flug) {
         return service.update(flug);
     }
 

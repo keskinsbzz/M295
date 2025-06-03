@@ -36,4 +36,3 @@ public class FlugService {
         repository.deleteById(id);
     }
 }
-
