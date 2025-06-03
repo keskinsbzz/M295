@@ -1,48 +1,51 @@
 package ch.flughafen.flugapi295.controller;
 
 import ch.flughafen.flugapi295.model.Startflughafen;
-import ch.flughafen.flugapi295.service.StartflughafenService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import ch.flughafen.flugapi295.repository.StartflughafenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/startflughafen")
+@RequestMapping("/startflughafen")
 public class StartflughafenController {
 
-    private final StartflughafenService service;
+    @Autowired
+    private StartflughafenRepository repository;
 
-    public StartflughafenController(StartflughafenService service) {
-        this.service = service;
+    @PostMapping
+    public Startflughafen create(@RequestBody Startflughafen startflughafen) {
+        return repository.save(startflughafen);
     }
 
     @GetMapping
     public List<Startflughafen> getAll() {
-        return service.getAll();
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")
     public Startflughafen getById(@PathVariable Integer id) {
-        return service.getById(id).orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
-    @PostMapping
-    public Startflughafen create(@RequestBody @Valid Startflughafen startflughafen) {
-        return service.save(startflughafen);
-    }
-
-    @PutMapping
-    public Startflughafen update(@RequestBody @Valid Startflughafen startflughafen) {
-        return service.update(startflughafen);
+    @PutMapping("/{id}")
+    public Startflughafen update(@PathVariable Integer id, @RequestBody Startflughafen updated) {
+        Startflughafen existing = repository.findById(id).orElse(null);
+        if (existing != null) {
+            existing.setName(updated.getName());
+            existing.setLand(updated.getLand());
+            existing.setStadt(updated.getStadt());
+            existing.setEroeffnet(updated.getEroeffnet());
+            existing.setLandebahnen(updated.getLandebahnen());
+            existing.setInternational(updated.getInternational());
+            return repository.save(existing);
+        }
+        return null;
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deleteById(id);
+        repository.deleteById(id);
     }
 }
