@@ -20,8 +20,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/startflughafen/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
@@ -33,10 +32,16 @@ public class SecurityConfig {
     public UserDetailsService users() {
         UserDetails admin = User
                 .withUsername("admin")
-                .password("{noop}adminpass") // {noop} für kein Encoding
+                .password("{noop}adminpass")
                 .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin);
+        UserDetails user = User
+                .withUsername("user")
+                .password("{noop}userpass")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, user);
     }
 }

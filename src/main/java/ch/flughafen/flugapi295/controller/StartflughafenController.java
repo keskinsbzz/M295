@@ -2,7 +2,8 @@ package ch.flughafen.flugapi295.controller;
 
 import ch.flughafen.flugapi295.model.Startflughafen;
 import ch.flughafen.flugapi295.repository.StartflughafenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,13 +12,18 @@ import java.util.List;
 @RequestMapping("/startflughafen")
 public class StartflughafenController {
 
-    @Autowired
-    private StartflughafenRepository repository;
+    private final StartflughafenRepository repository;
+
+    public StartflughafenController(StartflughafenRepository repository) {
+        this.repository = repository;
+    }
 
     @PostMapping
-    public Startflughafen create(@RequestBody Startflughafen startflughafen) {
-        return repository.save(startflughafen);
+    public ResponseEntity<Startflughafen> create(@Valid @RequestBody Startflughafen startflughafen) {
+        Startflughafen saved = repository.save(startflughafen);
+        return ResponseEntity.ok(saved);
     }
+
 
     @GetMapping
     public List<Startflughafen> getAll() {
@@ -25,27 +31,18 @@ public class StartflughafenController {
     }
 
     @GetMapping("/{id}")
-    public Startflughafen getById(@PathVariable Integer id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @PutMapping("/{id}")
-    public Startflughafen update(@PathVariable Integer id, @RequestBody Startflughafen updated) {
-        Startflughafen existing = repository.findById(id).orElse(null);
-        if (existing != null) {
-            existing.setName(updated.getName());
-            existing.setLand(updated.getLand());
-            existing.setStadt(updated.getStadt());
-            existing.setEroeffnet(updated.getEroeffnet());
-            existing.setLandebahnen(updated.getLandebahnen());
-            existing.setInternational(updated.getInternational());
-            return repository.save(existing);
-        }
-        return null;
+    public ResponseEntity<Startflughafen> getById(@PathVariable Integer id) {
+        return repository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,0 +1,41 @@
+### GET alle Startflughäfen
+GET http://localhost:8080/startflughafen
+Authorization: Basic admin adminpass
+Accept: application/json
+
+### GET einen spezifischen Startflughafen
+GET http://localhost:8080/startflughafen/1
+Authorization: Basic admin adminpass
+Accept: application/json
+
+### POST neuen Startflughafen anlegen
+POST http://localhost:8080/startflughafen
+Authorization: Basic YWRtaW46YWRtaW5wYXNz
+Content-Type: application/json
+
+{
+  "name": "Test Airport",
+  "land": "Deutschland",
+  "stadt": "Berlin",
+  "eroeffnet": "2022-01-01",
+  "landebahnen": 2,
+  "international": true
+}
+
+### PUT Startflughafen aktualisieren
+PUT http://localhost:8080/startflughafen/1
+Authorization: Basic admin adminpass
+Content-Type: application/json
+
+{
+  "name": "München Updated",
+  "land": "Deutschland",
+  "stadt": "München",
+  "eroeffnet": "1990-01-01",
+  "landebahnen": 3,
+  "international": true
+}
+
+### DELETE Startflughafen löschen
+DELETE http://localhost:8080/startflughafen/1
+Authorization: Basic admin adminpass

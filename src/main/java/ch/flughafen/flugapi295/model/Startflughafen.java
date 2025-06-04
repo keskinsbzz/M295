@@ -1,13 +1,10 @@
 package ch.flughafen.flugapi295.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -27,7 +24,7 @@ public class Startflughafen {
     private String stadt;
 
     @PastOrPresent(message = "Das Eröffnungsdatum darf nicht in der Zukunft liegen.")
-    private Date eroeffnet;
+    private LocalDate eroeffnet;
 
     @Min(value = 1, message = "Es muss mindestens eine Landebahn geben.")
     private Integer landebahnen;
